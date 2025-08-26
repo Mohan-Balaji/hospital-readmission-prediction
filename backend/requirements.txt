@@ -1,0 +1,9 @@
+geopandas==1.1.1
+joblib==1.5.1
+numpy==2.0.2
+pandas==2.2.2
+pandas-datareader==0.10.0
+pandas-gbq==0.29.2
+pandas-stubs==2.2.2.240909
+sklearn-pandas==2.2.0
+xgboost==3.0.4
