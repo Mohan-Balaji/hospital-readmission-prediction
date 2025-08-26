@@ -5,7 +5,28 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import * as XLSX from 'xlsx';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList, ReferenceLine, Legend, Cell } from 'recharts';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000';
+// API Base URL configuration
+const getApiBase = () => {
+  // Check for environment variable first
+  const envApiBase = import.meta.env.VITE_API_BASE;
+  
+  // If environment variable is set and doesn't look like a frontend URL, use it
+  if (envApiBase && !envApiBase.includes('azurestaticapps.net')) {
+    return envApiBase;
+  }
+  
+  // Default to the Azure backend API
+  return 'https://hospital-readmission-backend-api-e5fsevbxggfhdxbr.southindia-01.azurewebsites.net';
+};
+
+const API_BASE = getApiBase();
+
+// Fallback API URLs in case the primary one fails
+const FALLBACK_APIS = [
+  'https://hospital-readmission-backend-api-e5fsevbxggfhdxbr.southindia-01.azurewebsites.net',
+  'http://127.0.0.1:8000',
+  'http://localhost:8000'
+];
 
 const DIAG_OPTIONS = [
   { value: '', label: 'Select diagnosis' },
@@ -80,8 +101,34 @@ const DashboardPage = () => {
     readmitted: ''
   });
   const [manualError, setManualError] = useState('');
+  const [apiStatus, setApiStatus] = useState({ connected: false, endpoint: '', checking: true });
 
   const acceptedExtensions = useMemo(() => ['.xls', '.xlsx'], []);
+
+  // Check API status on component mount
+  React.useEffect(() => {
+    const checkApiStatus = async () => {
+      setApiStatus({ connected: false, endpoint: '', checking: true });
+      
+      const apiUrls = [API_BASE, ...FALLBACK_APIS.filter(url => url !== API_BASE)];
+      
+      for (const baseUrl of apiUrls) {
+        try {
+          const isHealthy = await checkApiHealth(baseUrl);
+          if (isHealthy) {
+            setApiStatus({ connected: true, endpoint: baseUrl, checking: false });
+            return;
+          }
+        } catch (error) {
+          console.error(`API status check failed for ${baseUrl}:`, error);
+        }
+      }
+      
+      setApiStatus({ connected: false, endpoint: '', checking: false });
+    };
+    
+    checkApiStatus();
+  }, []);
 
   const handleBrowseClick = () => {
     fileInputRef.current?.click();
@@ -161,17 +208,54 @@ const DashboardPage = () => {
     };
   };
 
-  const callExplain = async (patient) => {
-    const res = await fetch(`${API_BASE}/explain`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patient)
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail || `HTTP ${res.status}`);
+  const checkApiHealth = async (baseUrl) => {
+    try {
+      const res = await fetch(`${baseUrl}/health`);
+      return res.ok;
+    } catch (error) {
+      console.error(`API health check failed for ${baseUrl}:`, error);
+      return false;
     }
-    return res.json();
+  };
+
+  const callExplain = async (patient) => {
+    // Try multiple API endpoints
+    const apiUrls = [API_BASE, ...FALLBACK_APIS.filter(url => url !== API_BASE)];
+    
+    for (const baseUrl of apiUrls) {
+      try {
+        console.log('Trying API with URL:', `${baseUrl}/explain`);
+        
+        // First check if API is accessible
+        const isHealthy = await checkApiHealth(baseUrl);
+        if (!isHealthy) {
+          console.log(`API at ${baseUrl} is not healthy, trying next...`);
+          continue;
+        }
+        
+        const res = await fetch(`${baseUrl}/explain`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(patient)
+        });
+        
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          console.error('API Error:', res.status, res.statusText, err);
+          throw new Error(err.detail || `HTTP ${res.status}: ${res.statusText}`);
+        }
+        
+        console.log(`Successfully called API at ${baseUrl}`);
+        return res.json();
+      } catch (error) {
+        console.error(`Failed to call API at ${baseUrl}:`, error);
+        // Continue to next API if this one fails
+        continue;
+      }
+    }
+    
+    // If all APIs fail, throw an error
+    throw new Error('All API endpoints are unreachable. Please check your network connection and backend service status.');
   };
 
   const processFile = useCallback(async (file) => {
@@ -334,9 +418,56 @@ const DashboardPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {user?.email || 'User'}!</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+                <p className="text-gray-600">Welcome back, {user?.email || 'User'}!</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {apiStatus.checking ? (
+                  <div className="flex items-center gap-2 text-yellow-600">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm">Checking API...</span>
+                  </div>
+                ) : apiStatus.connected ? (
+                  <div className="flex items-center gap-2 text-green-600">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm">API Connected</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-red-600">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-sm">API Disconnected</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+
+          {/* API Status Warning */}
+          {!apiStatus.checking && !apiStatus.connected && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">API Connection Issue</h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    <p>The backend API is currently unreachable. This may be due to:</p>
+                    <ul className="list-disc list-inside mt-1 space-y-1">
+                      <li>Backend service is down or restarting</li>
+                      <li>Network connectivity issues</li>
+                      <li>Incorrect API endpoint configuration</li>
+                    </ul>
+                    <p className="mt-2">Please try again later or contact support if the issue persists.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Uploader */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-8">
