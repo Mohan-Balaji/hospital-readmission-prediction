@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -21,13 +21,35 @@ try {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
 
-    // Disable app verification (reCAPTCHA for phone, etc.) only during local development
-    if (import.meta.env.DEV && auth?.settings) {
-      auth.settings.appVerificationDisabledForTesting = true;
-      console.log('App verification disabled for testing (development only)');
+    // IMPORTANT: Only connect to emulator in development AND if emulator is running
+    if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+      try {
+        // Check if emulator is already connected
+        if (!auth._delegate?._emulator) {
+          connectAuthEmulator(auth, 'http://localhost:9099');
+          console.log('Connected to Firebase Auth Emulator');
+        }
+      } catch (emulatorError) {
+        console.warn('Could not connect to Firebase Auth Emulator:', emulatorError);
+        console.warn('Using production Firebase Auth instead');
+      }
+    }
+
+    // Configure auth settings
+    if (auth?.settings) {
+      // Only disable app verification in development with emulator
+      if (import.meta.env.DEV && import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+        auth.settings.appVerificationDisabledForTesting = true;
+        console.log('App verification disabled for testing (development with emulator only)');
+      } else {
+        // Ensure it's enabled for production
+        auth.settings.appVerificationDisabledForTesting = false;
+      }
     }
 
     console.log('Firebase initialized successfully');
+    console.log('Environment:', import.meta.env.DEV ? 'Development' : 'Production');
+    console.log('Auth Domain:', firebaseConfig.authDomain);
   } else {
     throw new Error('Firebase configuration is incomplete');
   }
