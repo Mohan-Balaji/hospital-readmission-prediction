@@ -20,6 +20,13 @@ try {
   if (firebaseConfig.apiKey && firebaseConfig.authDomain && firebaseConfig.projectId) {
     app = getApps().length ? getApp() : initializeApp(firebaseConfig);
     auth = getAuth(app);
+
+    // Disable app verification (reCAPTCHA for phone, etc.) only during local development
+    if (import.meta.env.DEV && auth?.settings) {
+      auth.settings.appVerificationDisabledForTesting = true;
+      console.log('App verification disabled for testing (development only)');
+    }
+
     console.log('Firebase initialized successfully');
   } else {
     throw new Error('Firebase configuration is incomplete');
