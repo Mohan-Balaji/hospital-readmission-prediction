@@ -28,17 +28,29 @@ jobs:
           python-version: '3.12'
       
       - name: Create and start virtual environment
+        working-directory: ./backend
         run: |
           python3.12 -m venv venv
           source venv/bin/activate
-          echo "$VIRTUAL_ENV/bin" >> $GITHUB_PATH
+          echo "$PWD/venv/bin" >> $GITHUB_PATH
           python --version
           which python
       
+      - name: Debug - List repository structure
+        working-directory: ./backend
+        run: |
+          echo "Current directory:"
+          pwd
+          echo "Files in backend directory:"
+          ls -la
+          echo "Virtual environment:"
+          ls -la venv/bin/ | head -5
+      
       - name: Install dependencies
+        working-directory: ./backend
         run: |
           python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt
+          pip install -r requirements.txt
        
       # Test that the FastAPI app can start
       - name: Test FastAPI app startup
@@ -54,8 +66,8 @@ jobs:
         with:
           name: python-app
           path: |
-            .
-            !venv/
+            backend/
+            !backend/venv/
 
   deploy:
     runs-on: ubuntu-latest
