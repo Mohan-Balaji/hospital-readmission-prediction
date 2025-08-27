@@ -9,12 +9,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGri
 const getApiBase = () => {
   // Check for environment variable first
   const envApiBase = import.meta.env.VITE_API_BASE;
-  
+
   // If environment variable is set and doesn't look like a frontend URL, use it
   if (envApiBase && !envApiBase.includes('azurestaticapps.net')) {
     return envApiBase;
   }
-  
+
   // Default to the Azure backend API
   return 'https://hospital-readmission-backend-api-e5fsevbxggfhdxbr.southindia-01.azurewebsites.net';
 };
@@ -109,9 +109,9 @@ const DashboardPage = () => {
   React.useEffect(() => {
     const checkApiStatus = async () => {
       setApiStatus({ connected: false, endpoint: '', checking: true });
-      
+
       const apiUrls = [API_BASE, ...FALLBACK_APIS.filter(url => url !== API_BASE)];
-      
+
       for (const baseUrl of apiUrls) {
         try {
           const isHealthy = await checkApiHealth(baseUrl);
@@ -123,10 +123,10 @@ const DashboardPage = () => {
           console.error(`API status check failed for ${baseUrl}:`, error);
         }
       }
-      
+
       setApiStatus({ connected: false, endpoint: '', checking: false });
     };
-    
+
     checkApiStatus();
   }, []);
 
@@ -219,43 +219,32 @@ const DashboardPage = () => {
   };
 
   const callExplain = async (patient) => {
-    // Try multiple API endpoints
-    const apiUrls = [API_BASE, ...FALLBACK_APIS.filter(url => url !== API_BASE)];
-    
+    // Prefer the endpoint discovered at startup; fall back only if needed
+    const preferred = apiStatus?.endpoint && apiStatus.connected ? apiStatus.endpoint : API_BASE;
+    const apiUrls = [preferred, ...FALLBACK_APIS.filter(url => url !== preferred)];
+
     for (const baseUrl of apiUrls) {
       try {
-        console.log('Trying API with URL:', `${baseUrl}/explain`);
-        
-        // First check if API is accessible
-        const isHealthy = await checkApiHealth(baseUrl);
-        if (!isHealthy) {
-          console.log(`API at ${baseUrl} is not healthy, trying next...`);
-          continue;
-        }
-        
         const res = await fetch(`${baseUrl}/explain`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(patient)
         });
-        
+
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          console.error('API Error:', res.status, res.statusText, err);
           throw new Error(err.detail || `HTTP ${res.status}: ${res.statusText}`);
         }
-        
-        console.log(`Successfully called API at ${baseUrl}`);
+
         return res.json();
       } catch (error) {
-        console.error(`Failed to call API at ${baseUrl}:`, error);
-        // Continue to next API if this one fails
+        // Try next endpoint
+        console.error(`POST /explain failed at ${baseUrl}:`, error);
         continue;
       }
     }
-    
-    // If all APIs fail, throw an error
-    throw new Error('All API endpoints are unreachable. Please check your network connection and backend service status.');
+
+    throw new Error('All API endpoints failed for /explain.');
   };
 
   const processFile = useCallback(async (file) => {
@@ -308,22 +297,22 @@ const DashboardPage = () => {
         if (r.ok) {
           samples = await r.json();
         }
-      } catch {}
+      } catch { }
       if (!samples || !Array.isArray(samples) || samples.length === 0) {
         samples = [
           {
-            age: '[70-80)',
-            medical_specialty: 'Cardiology',
-            n_outpatient: 0,
-            n_inpatient: 1,
-            n_emergency: 0,
-            n_procedures: 2,
-            n_lab_procedures: 20,
-            n_medications: 10,
-            time_in_hospital: 3,
-            diag_1: 'circulatory',
-            diag_2: 'diabetes',
-            diag_3: 'respiratory'
+            "age": "[50-60)",
+            "time_in_hospital": 3,
+            "n_lab_procedures": 39,
+            "n_procedures": 10,
+            "n_medications": 79,
+            "n_outpatient": 0,
+            "n_inpatient": 10,
+            "n_emergency": 9,
+            "medical_specialty": "Other",
+            "diag_1": "Respiratory",
+            "diag_2": "Other",
+            "diag_3": "Circulatory"
           }
         ];
       }
@@ -474,10 +463,10 @@ const DashboardPage = () => {
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-gray-900">Provide input</h2>
               <div className="inline-flex rounded-md shadow-sm" role="group">
-                <button type="button" onClick={() => setInputMode('upload')} className={`px-4 py-2 text-sm font-medium border ${inputMode==='upload' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-l-md hover:bg-blue-50`}>
+                <button type="button" onClick={() => setInputMode('upload')} className={`px-4 py-2 text-sm font-medium border ${inputMode === 'upload' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-l-md hover:bg-blue-50`}>
                   Upload Excel
                 </button>
-                <button type="button" onClick={() => setInputMode('manual')} className={`px-4 py-2 text-sm font-medium border ${inputMode==='manual' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-r-md hover:bg-blue-50`}>
+                <button type="button" onClick={() => setInputMode('manual')} className={`px-4 py-2 text-sm font-medium border ${inputMode === 'manual' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-r-md hover:bg-blue-50`}>
                   Manual entry
                 </button>
               </div>
@@ -494,7 +483,7 @@ const DashboardPage = () => {
                   <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                       </svg>
                       <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                       <p className="text-xs text-gray-500">XLS or XLSX</p>
@@ -786,7 +775,7 @@ const DashboardPage = () => {
             </a>
           </div>
           {/* Stats Cards */}
-         
+
         </div>
       </div>
     </ProtectedRoute>
