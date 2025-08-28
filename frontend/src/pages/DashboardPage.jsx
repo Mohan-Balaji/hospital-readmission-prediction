@@ -5,7 +5,28 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import * as XLSX from 'xlsx';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList, ReferenceLine, Legend, Cell } from 'recharts';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000';
+// API Base URL configuration
+const getApiBase = () => {
+  // Check for environment variable first
+  const envApiBase = import.meta.env.VITE_API_BASE;
+
+  // If environment variable is set and doesn't look like a frontend URL, use it
+  if (envApiBase && !envApiBase.includes('azurestaticapps.net')) {
+    return envApiBase;
+  }
+
+  // Default to the Azure backend API
+  return 'https://hospital-readmission-backend-api-e5fsevbxggfhdxbr.southindia-01.azurewebsites.net';
+};
+
+const API_BASE = getApiBase();
+
+// Fallback API URLs in case the primary one fails
+const FALLBACK_APIS = [
+  'https://hospital-readmission-backend-api-e5fsevbxggfhdxbr.southindia-01.azurewebsites.net',
+  'http://127.0.0.1:8000',
+  'http://localhost:8000'
+];
 
 const DIAG_OPTIONS = [
   { value: '', label: 'Select diagnosis' },
@@ -80,8 +101,34 @@ const DashboardPage = () => {
     readmitted: ''
   });
   const [manualError, setManualError] = useState('');
+  const [apiStatus, setApiStatus] = useState({ connected: false, endpoint: '', checking: true });
 
   const acceptedExtensions = useMemo(() => ['.xls', '.xlsx'], []);
+
+  // Check API status on component mount
+  React.useEffect(() => {
+    const checkApiStatus = async () => {
+      setApiStatus({ connected: false, endpoint: '', checking: true });
+
+      const apiUrls = [API_BASE, ...FALLBACK_APIS.filter(url => url !== API_BASE)];
+
+      for (const baseUrl of apiUrls) {
+        try {
+          const isHealthy = await checkApiHealth(baseUrl);
+          if (isHealthy) {
+            setApiStatus({ connected: true, endpoint: baseUrl, checking: false });
+            return;
+          }
+        } catch (error) {
+          console.error(`API status check failed for ${baseUrl}:`, error);
+        }
+      }
+
+      setApiStatus({ connected: false, endpoint: '', checking: false });
+    };
+
+    checkApiStatus();
+  }, []);
 
   const handleBrowseClick = () => {
     fileInputRef.current?.click();
@@ -161,17 +208,43 @@ const DashboardPage = () => {
     };
   };
 
-  const callExplain = async (patient) => {
-    const res = await fetch(`${API_BASE}/explain`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(patient)
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail || `HTTP ${res.status}`);
+  const checkApiHealth = async (baseUrl) => {
+    try {
+      const res = await fetch(`${baseUrl}/health`);
+      return res.ok;
+    } catch (error) {
+      console.error(`API health check failed for ${baseUrl}:`, error);
+      return false;
     }
-    return res.json();
+  };
+
+  const callExplain = async (patient) => {
+    // Prefer the endpoint discovered at startup; fall back only if needed
+    const preferred = apiStatus?.endpoint && apiStatus.connected ? apiStatus.endpoint : API_BASE;
+    const apiUrls = [preferred, ...FALLBACK_APIS.filter(url => url !== preferred)];
+
+    for (const baseUrl of apiUrls) {
+      try {
+        const res = await fetch(`${baseUrl}/explain`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(patient)
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `HTTP ${res.status}: ${res.statusText}`);
+        }
+
+        return res.json();
+      } catch (error) {
+        // Try next endpoint
+        console.error(`POST /explain failed at ${baseUrl}:`, error);
+        continue;
+      }
+    }
+
+    throw new Error('All API endpoints failed for /explain.');
   };
 
   const processFile = useCallback(async (file) => {
@@ -224,22 +297,22 @@ const DashboardPage = () => {
         if (r.ok) {
           samples = await r.json();
         }
-      } catch {}
+      } catch { }
       if (!samples || !Array.isArray(samples) || samples.length === 0) {
         samples = [
           {
-            age: '[70-80)',
-            medical_specialty: 'Cardiology',
-            n_outpatient: 0,
-            n_inpatient: 1,
-            n_emergency: 0,
-            n_procedures: 2,
-            n_lab_procedures: 20,
-            n_medications: 10,
-            time_in_hospital: 3,
-            diag_1: 'circulatory',
-            diag_2: 'diabetes',
-            diag_3: 'respiratory'
+            "age": "[50-60)",
+            "time_in_hospital": 3,
+            "n_lab_procedures": 39,
+            "n_procedures": 10,
+            "n_medications": 79,
+            "n_outpatient": 0,
+            "n_inpatient": 10,
+            "n_emergency": 9,
+            "medical_specialty": "Other",
+            "diag_1": "Respiratory",
+            "diag_2": "Other",
+            "diag_3": "Circulatory"
           }
         ];
       }
@@ -334,19 +407,66 @@ const DashboardPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {user?.email || 'User'}!</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
+                <p className="text-gray-600">Welcome back, {user?.email || 'User'}!</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {apiStatus.checking ? (
+                  <div className="flex items-center gap-2 text-yellow-600">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm">Checking API...</span>
+                  </div>
+                ) : apiStatus.connected ? (
+                  <div className="flex items-center gap-2 text-green-600">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span className="text-sm">API Connected</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-red-600">
+                    <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                    <span className="text-sm">API Disconnected</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+
+          {/* API Status Warning */}
+          {!apiStatus.checking && !apiStatus.connected && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">API Connection Issue</h3>
+                  <div className="mt-2 text-sm text-red-700">
+                    <p>The backend API is currently unreachable. This may be due to:</p>
+                    <ul className="list-disc list-inside mt-1 space-y-1">
+                      <li>Backend service is down or restarting</li>
+                      <li>Network connectivity issues</li>
+                      <li>Incorrect API endpoint configuration</li>
+                    </ul>
+                    <p className="mt-2">Please try again later or contact support if the issue persists.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Uploader */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-8">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-semibold text-gray-900">Provide input</h2>
               <div className="inline-flex rounded-md shadow-sm" role="group">
-                <button type="button" onClick={() => setInputMode('upload')} className={`px-4 py-2 text-sm font-medium border ${inputMode==='upload' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-l-md hover:bg-blue-50`}>
+                <button type="button" onClick={() => setInputMode('upload')} className={`px-4 py-2 text-sm font-medium border ${inputMode === 'upload' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-l-md hover:bg-blue-50`}>
                   Upload Excel
                 </button>
-                <button type="button" onClick={() => setInputMode('manual')} className={`px-4 py-2 text-sm font-medium border ${inputMode==='manual' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-r-md hover:bg-blue-50`}>
+                <button type="button" onClick={() => setInputMode('manual')} className={`px-4 py-2 text-sm font-medium border ${inputMode === 'manual' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 border-gray-300'} rounded-r-md hover:bg-blue-50`}>
                   Manual entry
                 </button>
               </div>
@@ -363,7 +483,7 @@ const DashboardPage = () => {
                   <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <svg className="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                       </svg>
                       <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
                       <p className="text-xs text-gray-500">XLS or XLSX</p>
@@ -655,7 +775,7 @@ const DashboardPage = () => {
             </a>
           </div>
           {/* Stats Cards */}
-         
+
         </div>
       </div>
     </ProtectedRoute>
