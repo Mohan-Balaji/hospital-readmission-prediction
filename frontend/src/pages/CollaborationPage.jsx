@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import workDoneImage from '../assets/workdone.png';
 import jiraTimelineImage from '../assets/jira-timeline-white.png';
 import workProgressImage from '../assets/workprogress.png';
-import jiraLogo from '../assets/jira-logo.png';
+import jiraLogo from '../assets/jira_logo.png';
 import githubLogo from '../assets/githublogo.png';
 import Google_Meet_Symbol from '../assets/Google_Meet_Symbol.png';
 import GoogleDoc from '../assets/GoogleDoc.png';
