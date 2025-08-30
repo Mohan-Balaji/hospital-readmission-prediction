@@ -4,7 +4,7 @@ import workDoneImage from '../assets/workdone.png';
 import jiraTimelineImage from '../assets/jira-timeline-white.png';
 import workProgressImage from '../assets/workprogress.png';
 import githubLogo from '../assets/githublogo.png';
-import jiraLogo from '../assets/jira_logo.png';
+import jiraLogo from '../assets/jira_Logo.png';
 import Google_Meet_Symbol from '../assets/Google_Meet_Symbol.png';
 import GoogleDoc from '../assets/GoogleDoc.png';
 
