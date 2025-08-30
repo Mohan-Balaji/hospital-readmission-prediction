@@ -5,6 +5,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import * as XLSX from 'xlsx';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, LabelList, ReferenceLine, Legend, Cell } from 'recharts';
 
+
 // API Base URL configuration
 const getApiBase = () => {
   // Check for environment variable first
@@ -82,6 +83,7 @@ const DashboardPage = () => {
 
   // Manual entry form state
   const [manual, setManual] = useState({
+    patient_id: '',
     age: '',
     time_in_hospital: 1,
     n_lab_procedures: 0,
@@ -97,8 +99,7 @@ const DashboardPage = () => {
     glucose_test: '',
     A1Ctest: '',
     change: '',
-    diabetes_med: '',
-    readmitted: ''
+    diabetes_med: ''
   });
   const [manualError, setManualError] = useState('');
   const [apiStatus, setApiStatus] = useState({ connected: false, endpoint: '', checking: true });
@@ -193,6 +194,7 @@ const DashboardPage = () => {
     };
 
     return {
+      patient_id: get(['patient_id', 'patientid', 'id', 'patient_id']),
       age: get(['age']),
       medical_specialty: get(['medical_specialty', 'specialty', 'speciality']),
       n_outpatient: Number(get(['n_outpatient', 'outpatient_visits', 'n_out'], 0)) || 0,
@@ -334,6 +336,7 @@ const DashboardPage = () => {
       const reasons = (r.reasons || []).join('\n');
       return {
         Index: r.index,
+        'Patient ID': r.patient_id || '',
         Risk: r.risk_label || '',
         Probability: r.readmission_probability !== undefined ? Number(r.readmission_probability).toFixed(4) : '',
         Reasons: reasons,
@@ -356,6 +359,7 @@ const DashboardPage = () => {
     setProcessing(true);
     try {
       const payload = {
+        patient_id: manual.patient_id || null,
         age: manual.age || null,
         medical_specialty: manual.medical_specialty || null,
         n_outpatient: Number(manual.n_outpatient) || 0,
@@ -371,8 +375,7 @@ const DashboardPage = () => {
         glucose_test: manual.glucose_test || null,
         A1Ctest: manual.A1Ctest || null,
         change: manual.change || null,
-        diabetes_med: manual.diabetes_med || null,
-        readmitted: manual.readmitted || null
+        diabetes_med: manual.diabetes_med || null
       };
       const explanation = await callExplain(payload);
       const newIndex = results.length + 1;
@@ -508,6 +511,11 @@ const DashboardPage = () => {
                 <div className="mt-2">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Enter patient manually</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* patient_id */}
+                    <div className="flex flex-col gap-1">
+                      <label className="text-sm font-medium text-gray-700">Patient ID</label>
+                      <input name="patient_id" value={manual.patient_id} onChange={onManualChange} type="text" placeholder="e.g. P001" className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    </div>
                     {/* age */}
                     <div className="flex flex-col gap-1">
                       <label className="text-sm font-medium text-gray-700">Age group</label>
@@ -624,16 +632,6 @@ const DashboardPage = () => {
                         <option value="No">No</option>
                       </select>
                     </div>
-                    {/* readmitted */}
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm font-medium text-gray-700">Readmitted</label>
-                      <select name="readmitted" value={manual.readmitted} onChange={onManualChange} className="px-3 py-2 border rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Select</option>
-                        <option value=">30">&gt;30</option>
-                        <option value="<30">&lt;=30</option>
-                        <option value="NO">NO</option>
-                      </select>
-                    </div>
                   </div>
                   <div className="flex items-center gap-3 mt-4">
                     <button onClick={submitManual} className="px-4 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-700">Predict</button>
@@ -659,6 +657,7 @@ const DashboardPage = () => {
                   <thead className="bg-gray-50">
                     <tr>
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient ID</th>
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk</th>
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Probability</th>
                       <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reasons</th>
@@ -668,6 +667,7 @@ const DashboardPage = () => {
                     {results.map((r, idx) => (
                       <tr key={r.index} onClick={() => setSelectedIndex(idx)} className={`cursor-pointer ${idx === selectedIndex ? 'bg-blue-50' : ''}`}>
                         <td className="px-4 py-2 text-sm text-gray-700">{r.index}</td>
+                        <td className="px-4 py-2 text-sm text-gray-700">{r.patient_id || '-'}</td>
                         <td className="px-4 py-2">
                           {r.error ? (
                             <span className="text-red-600 text-sm">Error</span>
@@ -770,16 +770,19 @@ const DashboardPage = () => {
                     fillRule="evenodd"
                   ></path>
                 </svg>
-                <span className="inline-block tabular-nums tracking-wider font-medium text-white">2</span>
+                <span className="inline-block tabular-nums tracking-wider font-medium text-white">4</span>
               </div>
             </a>
           </div>
           {/* Stats Cards */}
 
         </div>
+        
+
       </div>
     </ProtectedRoute>
   );
 };
 
 export default DashboardPage;
+

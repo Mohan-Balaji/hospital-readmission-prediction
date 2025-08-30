@@ -2,8 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase/config';
+import { toast } from 'sonner';
 import flowDiagram from '../assets/flow_diagram.jpg';
 import heroImage from '../assets/hero_image.jpg';
+import tailwindLogo from '../assets/tailwind-logo.png';
+import scikitLogo from '../assets/Scikit-learn-Logo.jpg';
+import shapLogo from '../assets/shap_logo.jpg';
+import appServicesLogo from '../assets/AppServices.png';
+import swaLogo from '../assets/SWA.jpg';
+import AzureLogo from '../assets/AzureLogo.png';
+import backend_icon from '../assets/backend_icon.jpg'
+import frontend_icon from '../assets/frontend_icon.jpg'
 
 export default function HomePage() {
   const [user, loading] = useAuthState(auth);
@@ -15,19 +24,23 @@ export default function HomePage() {
     fetch(`${API_URL}/health`).then(r => r.json()).then(d => setStatus(d.status || 'ok')).catch(() => setStatus('down'));
   }, [API_URL]);
 
-  // Redirect authenticated users to dashboard
+  // Show toast notification for authenticated users
   useEffect(() => {
     if (!loading && user) {
-      navigate('/dashboard');
+      toast.success('Welcome back! Click "Go to Dashboard" to start making predictions.', {
+        duration: 5000,
+        action: {
+          label: 'Go to Dashboard',
+          onClick: () => navigate('/dashboard')
+        }
+      });
     }
   }, [user, loading, navigate]);
 
   if (loading) return null;
 
-  // Only show landing page for non-authenticated users
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
         {/* Header Section */}
 
         {/* Hero Section */}
@@ -48,10 +61,10 @@ export default function HomePage() {
                 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
-                    onClick={() => navigate('/sign-up')}
+                    onClick={() => user ? navigate('/dashboard') : navigate('/sign-up')}
                     className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                   >
-                    Dashboard
+                    {user ? 'Go to Dashboard' : 'Dashboard'}
                   </button>
                   <button
                     onClick={() => navigate('/about')}
@@ -243,82 +256,12 @@ export default function HomePage() {
             </div>
 
             {/* Solution Overview */}
-            <div className="mt-16">
-              <div className="text-center mb-12">
-                <h3 className="text-3xl font-bold text-gray-900 mb-4">Our Solution</h3>
-                <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-                  We've developed an AI-powered system that addresses the limitations of conventional 
-                  models by using advanced machine learning techniques and real-time data processing.
-                </p>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Advanced ML Models */}
-                <div className="group relative">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 shadow-lg border border-blue-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-4">Advanced ML Models</h4>
-                    <p className="text-gray-700 leading-relaxed">
-                      State-of-the-art algorithms for accurate predictions with high precision and recall rates.
-                    </p>
-                    <div className="mt-6 flex items-center text-blue-600 font-medium">
-                      <span>Learn more</span>
-                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Real-time Processing */}
-                <div className="group relative">
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 shadow-lg border border-green-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                    <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-4">Real-time Processing</h4>
-                    <p className="text-gray-700 leading-relaxed">
-                      Instant risk assessment and alerts with sub-second response times for critical decisions.
-                    </p>
-                    <div className="mt-6 flex items-center text-green-600 font-medium">
-                      <span>Learn more</span>
-                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Secure & Compliant */}
-                <div className="group relative">
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 shadow-lg border border-purple-200 hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                      <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-4">Secure & Compliant</h4>
-                    <p className="text-gray-700 leading-relaxed">
-                      Healthcare-grade security and privacy with HIPAA compliance and enterprise encryption.
-                    </p>
-                    <div className="mt-6 flex items-center text-purple-600 font-medium">
-                      <span>Learn more</span>
-                      <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+           
+                
           </div>
+          
         </section>
+        
 
         {/* System Architecture Flow Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
@@ -380,114 +323,484 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Learning Problem Statement Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                Key Features
+                Learning Problem Statement
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Discover how our AI-powered platform can revolutionize your healthcare practice.
+                Understanding the machine learning challenge and our approach to solving hospital readmission prediction
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-all duration-300">
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Machine Learning Task</h3>
+                <div className="bg-blue-50 rounded-lg p-6 mb-6">
+                  <h4 className="font-semibold text-gray-800 mb-3">Problem Type</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                      <span><strong>Task:</strong> Classification</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                      <span><strong>Target:</strong> 30-day hospital readmission (Yes/No)</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                      <span><strong>Evaluation:</strong> Accuracy, ROC-AUC, F1-Score</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-orange-500 rounded-full mr-3"></div>
+                      <span><strong>Domain:</strong> Healthcare And Life Science</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Predictive Analytics</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Advanced machine learning models predict patient readmission risks with high accuracy, 
-                  helping you intervene early and improve outcomes.
-                </p>
+                
+                <div className="bg-green-50 rounded-lg p-6">
+                  <h4 className="font-semibold text-gray-800 mb-3">Input Features</h4>
+                  <div className="grid grid-cols-1 gap-2 text-xs">
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"age"</strong> - age bracket of the patient</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"time_in_hospital"</strong> - days (from 1 to 14)</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"n_procedures"</strong> - number of procedures performed during the hospital stay</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"n_lab_procedures"</strong> - number of laboratory procedures performed during the hospital stay</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"n_medications"</strong> - number of medications administered during the hospital stay</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"n_outpatient"</strong> - number of outpatient visits in the year before a hospital stay</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-pink-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"n_inpatient"</strong> - number of inpatient visits in the year before the hospital stay</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-yellow-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"n_emergency"</strong> - number of visits to the emergency room in the year before the hospital stay</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-cyan-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"medical_specialty"</strong> - the specialty of the admitting physician</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"diag_1"</strong> - primary diagnosis (Circulatory, Respiratory, Digestive, etc.)</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-lime-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"diag_2"</strong> - secondary diagnosis</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"diag_3"</strong> - additional secondary diagnosis</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-violet-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"glucose_test"</strong> - whether the glucose serum came out as high (&gt; 200), normal, or not performed</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-fuchsia-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"A1Ctest"</strong> - whether the A1C level of the patient came out as high (&gt; 7%), normal, or not performed</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-rose-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"change"</strong> - whether there was a change in the diabetes medication ('yes' or 'no')</span>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="w-2 h-2 bg-amber-500 rounded-full mr-2 mt-1.5 flex-shrink-0"></div>
+                      <span><strong>"diabetes_med"</strong> - whether a diabetes medication was prescribed ('yes' or 'no')</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 transition-all duration-300">
-                <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                  </svg>
+              
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Technical Challenges</h3>
+                <div className="space-y-4">
+                  <div className="border-l-4 border-red-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">Class Imbalance</h4>
+                    <p className="text-gray-600 text-sm">Target class is imbalanced where one class (non-readmission) has significantly more samples than the other (readmission cases), creating imbalanced classes that require special handling techniques like SMOTE, class weighting, or threshold optimization.</p>
+                  </div>
+                  <div className="border-l-4 border-yellow-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">Feature Engineering</h4>
+                    <p className="text-gray-600 text-sm">Complex medical data requires sophisticated feature engineering to extract meaningful patterns and relationships.</p>
+                  </div>
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">Interpretability</h4>
+                    <p className="text-gray-600 text-sm">Healthcare decisions require explainable AI models to understand prediction factors and build trust.</p>
+                  </div>
+                </div>        
+                <div className="mt-6 bg-purple-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-800 mb-2">Performance Metrics</h4>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
+                     <div className="flex items-center">
+                       <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                          <span>Accuracy &gt; 78%</span>
+                     </div>
+                     
+                     <div className="flex items-center">
+                       <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                      <span>ROC-AUC &gt; 86%</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                      <span>F1-Score &gt; 81%</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Secure & Compliant</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Built with healthcare security standards in mind. Your patient data is protected with 
-                  enterprise-grade encryption and compliance.
-                </p>
-              </div>
-
-              <div className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 transition-all duration-300">
-                <div className="w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Real-time Insights</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Get instant notifications and actionable insights. Monitor patient progress and 
-                  make informed decisions in real-time.
-                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Hospital Readmission Process Section */}
+        {/* Dataset & Methodology Section */}
         <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                How It Works
+                Dataset & Methodology
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Our AI system analyzes patient data to predict readmission risks and provide actionable insights.
+                Understanding our data sources and the methodology behind our machine learning approach
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {/* Step 1 */}
-              <div className="text-center">
-                <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-2xl font-bold text-white">1</span>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Kaggle Dataset</h3>
+                <div className="bg-gray-50 rounded-lg p-6">
+                  <h4 className="font-semibold text-gray-800 mb-3">Hospital Readmission Prediction Dataset</h4>
+                  <div className="space-y-3 text-sm text-gray-600">
+                    <div className="flex justify-between">
+                      <span>Source:</span>
+                      <span className="font-medium">Kaggle</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Records:</span>
+                      <span className="font-medium">~25,000 patient records</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Features:</span>
+                      <span className="font-medium">17 clinical variables</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Time Period:</span>
+                      <span className="font-medium">10 Years</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Target:</span>
+                      <span className="font-medium">30-day readmission</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Data Collection</h3>
-                <p className="text-gray-600">Patient demographics, medical history, and treatment data are securely collected and processed.</p>
+                <div className="mt-6">
+                  <h4 className="font-semibold text-gray-800 mb-3">Key Features Included:</h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                      <span>age</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                      <span>time_in_hospital</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-purple-500 rounded-full mr-2"></div>
+                      <span>n_procedures</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full mr-2"></div>
+                      <span>n_lab_procedures</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
+                      <span>n_medications</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>n_outpatient</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>n_inpatient</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>n_emergency</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>medical_specialty</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>diag_1</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>diag_2</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>diag_3</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>glucose_test</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>A1Ctest</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>change</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>diabetes_med</span>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></div>
+                      <span>readmitted</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              {/* Step 2 */}
-              <div className="text-center">
-                <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-2xl font-bold text-white">2</span>
+              <div>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">Our Approach</h3>
+                <div className="space-y-6">
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">1. Data Preprocessing</h4>
+                    <p className="text-gray-600 text-sm">Comprehensive data cleaning, feature engineering, and handling of missing values to prepare the dataset for machine learning.</p>
+                  </div>
+                  <div className="border-l-4 border-green-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">2. Model Development</h4>
+                    <p className="text-gray-600 text-sm">Development of ensemble models using Random Forest, XGBoost, and other advanced algorithms for optimal prediction accuracy.</p>
+                  </div>
+                  <div className="border-l-4 border-purple-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">3. Explainable AI</h4>
+                    <p className="text-gray-600 text-sm">Implementation of SHAP (SHapley Additive exPlanations) for model interpretability and feature importance analysis.</p>
+                  </div>
+                  <div className="border-l-4 border-orange-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">4. Web Application</h4>
+                    <p className="text-gray-600 text-sm">Development of a user-friendly web interface for healthcare providers to input patient data and receive predictions.</p>
+                  </div>
+                  <div className="border-l-4 border-red-500 pl-4">
+                    <h4 className="font-semibold text-gray-800 mb-2">5. Cloud Deployment</h4>
+                    <p className="text-gray-600 text-sm">Deployment on Microsoft Azure with CI/CD pipeline for scalable, secure, and reliable healthcare applications.</p>
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">AI Analysis</h3>
-                <p className="text-gray-600">Advanced machine learning algorithms analyze patterns and identify risk factors for readmission.</p>
               </div>
-
-              {/* Step 3 */}
-              <div className="text-center">
-                <div className="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-2xl font-bold text-white">3</span>
+              
+            </div>
+              
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-16 py-40">
+          <h2 className="text-4xl  font-bold text-gray-900 mb-8 text-center">Technology Stack</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 py-10">
+            {/* Frontend Technologies */}
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                <img src={backend_icon} alt="SHAP" className="w-8 h-8"/>
+                
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Risk Assessment</h3>
-                <p className="text-gray-600">Patients are categorized into low, medium, and high-risk groups based on AI predictions.</p>
+                Frontend Technologies
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">React.js</h4>
+                      <p className="text-sm text-gray-600">Modern UI framework</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">v18+</span>
+                </div>
+                
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src={tailwindLogo} alt="Tailwind CSS" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Tailwind CSS</h4>
+                      <p className="text-sm text-gray-600">Utility-first CSS framework</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-cyan-100 text-cyan-800 px-2 py-1 rounded">v3+</span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg" alt="Firebase" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Firebase</h4>
+                      <p className="text-sm text-gray-600">Authentication & hosting</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">v9+</span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" alt="Vite" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Vite</h4>
+                      <p className="text-sm text-gray-600">Build tool & dev server</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">v4+</span>
+                </div>
               </div>
+            </div>
 
-              {/* Step 4 */}
-              <div className="text-center">
-                <div className="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <span className="text-2xl font-bold text-white">4</span>
+            {/* Backend Technologies */}
+            <div>
+              <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center mr-3">
+                <img src={frontend_icon} alt="SHAP" className="w-8 h-8"/>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Intervention</h3>
-                <p className="text-gray-600">Healthcare providers receive alerts and recommendations for preventive care strategies.</p>
+                Backend Technologies
+              </h3>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Python</h4>
+                      <p className="text-sm text-gray-600">Programming language</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">v3.12</span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fastapi/fastapi-original.svg" alt="FastAPI" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">FastAPI</h4>
+                      <p className="text-sm text-gray-600">Modern web framework</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">v0.100+</span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src={scikitLogo} alt="Scikit-learn" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">Scikit-learn</h4>
+                      <p className="text-sm text-gray-600">Machine learning library</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">v1.3+</span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                      <img src={shapLogo} alt="SHAP" className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-800">SHAP</h4>
+                      <p className="text-sm text-gray-600">Model explainability</p>
+                    </div>
+                  </div>
+                  <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">v0.42+</span>
+                </div>
               </div>
             </div>
           </div>
+
+          {/* Cloud & DevOps */}
+          <div className="mt-12">
+            <h3 className="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+              <div className="w-8 h-8 flex items-center justify-center mr-3">
+               <img src={AzureLogo} alt="Azure Static Apps" className="w-8 h-8" />
+              </div>
+              Cloud Services
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                    <img src={swaLogo} alt="Azure Static Apps" className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-800">Azure Static Apps</h4>
+                    <p className="text-sm text-gray-600">Frontend hosting</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                    <img src={appServicesLogo} alt="Azure App Services" className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-800">Azure App Services</h4>
+                    <p className="text-sm text-gray-600">Backend hosting</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-3 border border-gray-200">
+                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-800">GitHub</h4>
+                    <p className="text-sm text-gray-600">Version control & CI/CD</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+
+          </div>
+          
         </section>
 
-        {/* CTA Section */}
+      
+
+        {/* Technology Stack Section */}
+      
+
 
         {/* Status Indicator */}
         <div className="fixed bottom-4 right-4">
@@ -500,14 +813,3 @@ export default function HomePage() {
       </div>
     );
   }
-
-  // Show loading while redirecting
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 border-t-transparent mx-auto mb-4"></div>
-        <p className="text-gray-600">Redirecting to dashboard...</p>
-      </div>
-    </div>
-  );
-}

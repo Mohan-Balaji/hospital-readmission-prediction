@@ -26,7 +26,7 @@ const NavBar = () => {
         <Link to="/" className="flex items-center gap-4 hover:opacity-80 transition-opacity">
           <img src="/images/logo.jpg" className="h-12 w-12 object-contain rounded-lg border border-gray-200 shadow-lg" alt="Logo" />
           <span className="text-lg font-bold tracking-tight text-gray-800 hidden sm:block">Hospital Readmissions</span>
-          <span className="text-base font-bold tracking-tight text-gray-800 sm:hidden">HR</span>
+          <span className="text-base font-bold tracking-tight text-gray-800 sm:hidden">Hospital Readmissions</span>
         </Link>
         
         {/* Hamburger */}
@@ -63,6 +63,12 @@ const NavBar = () => {
             className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
           >
             About
+          </Link>
+          <Link
+            to="/collaboration"
+            className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
+          >
+            Collaboration
           </Link>
           
           {/* Authenticated user extra menu */}
@@ -125,6 +131,13 @@ const NavBar = () => {
             onClick={() => setMenuOpen(false)}
           >
             About
+          </Link>
+          <Link
+            to="/collaboration"
+            className="block px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
+            onClick={() => setMenuOpen(false)}
+          >
+            Collaboration
           </Link>
           
           {/* Authenticated user mobile menu */}

@@ -11,6 +11,7 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import DashboardPage from './pages/DashboardPage';
 import AboutPage from './pages/AboutPage';
+import CollaborationPage from './pages/CollaborationPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import './index.css';
 
@@ -39,6 +40,7 @@ function App() {
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/dashboard" element={<DashboardPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/collaboration" element={<CollaborationPage />} />
             </Routes>
           </main>
           <Footer />

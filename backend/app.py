@@ -49,9 +49,13 @@ class PatientData(BaseModel):
     diag_2: str = None
     diag_3: str = None
 
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
 
 @app.post("/predict")
 def predict(patient: PatientData):
