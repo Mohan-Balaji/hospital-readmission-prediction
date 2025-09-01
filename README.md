@@ -67,6 +67,9 @@ A **meta-classifier ensemble** system that:
 - **Azure App Service** - Backend API
 - **GitHub Actions** - CI/CD Pipeline
 
+![SuperNexis_Cognizant 1 1 -7](https://github.com/user-attachments/assets/9be17b3e-3576-4406-b9f1-b4a0e1df2714)
+
+
 ## 📊 Machine Learning Model
 
 ### Meta-Classifier Ensemble Architecture
@@ -188,3 +191,4 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
