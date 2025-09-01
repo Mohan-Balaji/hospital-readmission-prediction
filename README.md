@@ -1,7 +1,6 @@
 # 🏥 Hospital Readmission Prediction System
 ### *Intelligent AI-Powered Healthcare Risk Assessment Platform*
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11)
 [![Azure](https://img.shields.io/badge/Deployed%20on-Azure-blue.svg)](https://azure.microsoft.com/)
 [![FastAPI](https://img.shields.io/badge/API-FastAPI-green.svg)](https://fastapi.tiangolo.com/)
 [![Firebase](https://img.shields.io/badge/Auth-Firebase-orange.svg)](https://firebase.google.com/)
@@ -867,3 +866,4 @@ Ready to scale this solution in your organization? **Contact us** to discuss ent
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
 
 ---
+
