@@ -7,7 +7,7 @@
 
 ## 🎓 RMD Engineering College - Team SuperNexis
 
-**Domain:** Life Sciences & Healthcare Technology  
+**Domain:** Life Sciences
 **Problem:** Predicting Hospital Readmission Risk using Machine Learning  
 **Solution:** Meta-Classifier Ensemble with Explainable AI
 
@@ -192,3 +192,4 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
