@@ -173,6 +173,21 @@ Content-Type: application/json
 ```http
 POST /explain
 Content-Type: application/json
+
+{
+  "age": "[50-60)",
+  "time_in_hospital": 3,
+  "n_lab_procedures": 39,
+  "n_procedures": 10,
+  "n_medications": 79,
+  "n_outpatient": 0,
+  "n_inpatient": 10,
+  "n_emergency": 9,
+  "medical_specialty": "Other",
+  "diag_1": "Respiratory",
+  "diag_2": "Other",
+  "diag_3": "Circulatory"
+}
 ```
 
 ## 👥 Team
@@ -197,6 +212,7 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
 
 
 
