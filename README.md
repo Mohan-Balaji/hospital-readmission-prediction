@@ -1,107 +1,90 @@
 # 🏥 Hospital Readmission Prediction System
-### *Intelligent AI-Powered Healthcare Risk Assessment Platform*
 
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![React 19](https://img.shields.io/badge/React-19-blue.svg)](https://reactjs.org/)
 [![Azure](https://img.shields.io/badge/Deployed%20on-Azure-blue.svg)](https://azure.microsoft.com/)
-[![FastAPI](https://img.shields.io/badge/API-FastAPI-green.svg)](https://fastapi.tiangolo.com/)
-[![Firebase](https://img.shields.io/badge/Auth-Firebase-orange.svg)](https://firebase.google.com/)
+[![XGBoost](https://img.shields.io/badge/ML-XGBoost-orange.svg)](https://xgboost.readthedocs.io/)
 
----
+## 🎓 RMD Engineering College - Team SuperNexis
 
-## 🎓 **RMD Engineering College** - Hackathon Submission
-### **Team SuperNexis** 🚀
+**Domain:** Life Sciences
+**Problem:** Predicting Hospital Readmission Risk using Machine Learning  
+**Solution:** Meta-Classifier Ensemble with Explainable ML
 
-**🔬 Domain:** Life Sciences & Healthcare Technology  
-**💡 Problem Type:** Binary Classification & Explainable AI  
-**🎯 Challenge:** Predicting Hospital Readmission Risk with 99.9% Uptime
-
-> 🌟 *An award-winning, production-ready AI system that revolutionizes healthcare decision-making through explainable machine learning, deployed on Microsoft Azure with enterprise-grade security and real-time analytics.*
-
-### 🏆 **Hackathon Impact Statement**
-*Reducing healthcare costs by $30+ billion annually through accurate readmission prediction and preventive care optimization in the Life Sciences domain.*
+> An intelligent AI system that predicts hospital readmission risk with >78% accuracy, helping healthcare providers reduce costs and improve patient outcomes.
 
 ## 📋 Table of Contents
 
-- [🎯 Project Overview](#-project-overview)
-- [🚀 Innovation & Impact](#-innovation--impact)
-- [⚡ Key Features](#-key-features)
-- [🏗️ System Architecture](#️-system-architecture)
-- [🛠️ Technology Stack](#️-technology-stack)
-- [📊 Machine Learning Model](#-machine-learning-model)
-- [🔥 Live Demo](#-live-demo)
-- [📚 API Documentation](#-api-documentation)
-- [🚀 Quick Start Guide](#-quick-start-guide)
-- [☁️ Azure Deployment](#️-azure-deployment)
-- [👥 Team SuperNexis](#-team-supernexis)
-- [📞 Contact](#-contact)
+- [Problem & Solution](#-problem--solution)
+- [Key Features](#-key-features)
+- [Technology Stack](#-technology-stack)
+- [Machine Learning Model](#-machine-learning-model)
+- [Live Demo](#-live-demo)
+- [Quick Start](#-quick-start)
+- [API Documentation](#-api-documentation)
+- [Team](#-team)
+- [Contact](#-contact)
 
-## 🎯 Project Overview
+## 🎯 Problem & Solution
 
-### **🔥 The Healthcare Challenge We're Solving**
+### The Healthcare Challenge
+Hospital readmissions cost the U.S. healthcare system **$41 billion annually**, with 1 in 7 patients readmitted within 30 days.
 
-**💰 The Problem:** Hospital readmissions cost the U.S. healthcare system over **$41 billion annually**, with 1 in 7 patients readmitted within 30 days, often due to preventable factors.
-
-**🎯 Our Solution:** A cutting-edge **meta-classifier ensemble** system that:
+### Our Solution
+A **meta-classifier ensemble** system that:
 - Predicts readmission risk with **>90% accuracy**
-- Provides **real-time explainable AI** insights using SHAP
+- Provides **explainable AI** insights using SHAP
 - Offers **dual-mode interface** (manual + Excel batch processing)
-- Deployed on **Microsoft Azure** with enterprise-grade security
+- Deployed on **Microsoft Azure** with enterprise security
 
-### **🔬 Binary Classification Problem**
-
-**Problem Type:** Supervised Machine Learning Classification  
-**Target Variable:** `READMITTED` (0 = No Readmission, 1 = Readmission)  
-**Approach:** Two-level ensemble with meta-classifier architecture
-
-| **Input** | **Process** | **Output** |
-|-----------|-------------|------------|
-| Patient Data (16 features) | Meta-Classifier Ensemble | Risk Score + Explanations |
-| Demographics, Lab Results, Medical History | Feature Engineering + SHAP | Actionable Clinical Insights |
-
-### **🌟 Why This Matters for Life Sciences**
-
-1. **💊 Pharmaceutical Research:** Better patient stratification for clinical trials
-2. **🏥 Healthcare Operations:** Reduce costs and improve patient outcomes  
-3. **📊 Population Health:** Identify high-risk patient populations for interventions
-4. **🔬 Medical Research:** Generate insights for preventive medicine development
-
-## 🚀 Innovation & Impact
-
-### **🏆 What Makes Our Solution Award-Worthy**
-
-#### **🔬 Technical Innovation**
-- **Meta-Classifier Architecture:** First-in-class two-level ensemble combining Random Forest, XGBoost, and Logistic Regression
-- **Real-time SHAP Explanations:** Transparent AI that clinicians can trust and understand
-- **Hybrid Input System:** Seamless switching between manual entry and Excel batch processing
-- **Edge-Optimized Performance:** Sub-second predictions with 99.9% uptime on Azure
-
-#### **💡 Business Impact**
-| **Metric** | **Current State** | **With Our Solution** | **Impact** |
-|------------|-------------------|----------------------|------------|
-| Readmission Rate | 15-20% | 8-12% | **40% Reduction** |
-| Cost per Episode | $15,000 | $9,000 | **$6K Savings** |
-| Prediction Accuracy | 65-75% | **>90%** | **+25% Improvement** |
+### Impact
+| Metric | Before | With Our Solution | Improvement |
+|--------|--------|-------------------|-------------|
+| Prediction Accuracy | 65-75% | **>90%** | **+25%** |
 | Decision Time | 30+ minutes | **<30 seconds** | **60x Faster** |
-
-#### **🌍 Social Good Impact**
-- **👨‍⚕️ 10,000+ Healthcare Workers** empowered with AI-driven insights
-- **🏥 500+ Hospitals** potential deployment scale  
-- **💰 $30B+ Annual Savings** across U.S. healthcare system
-- **👥 2M+ Patients** benefiting from preventive care interventions
-
-### **🎓 Academic Excellence**
-- **📚 Research-Grade Implementation** with comprehensive documentation
-- **🔬 Peer-Reviewed Methodologies** following healthcare AI best practices  
-- **📊 Reproducible Results** with open-source codebase
-- **🏅 Production-Ready Quality** deployed on enterprise cloud infrastructure
+| Cost per Episode | $15,000 | $9,000 | **$6K Savings** |
 
 ## ⚡ Key Features
 
 ### **🧠 AI-Powered Intelligence**
-- **🎯 Meta-Classifier Ensemble:** Advanced two-level architecture with optimal model combination
-- **⚡ Real-time Predictions:** Sub-second response times with 99.9% availability
-- **🔍 SHAP Explainable AI:** Transparent feature importance with clinical reasoning
-- **📊 Risk Stratification:** Automated patient categorization (Low/Medium/High risk)
-- **🎛️ Threshold Optimization:** Clinically-validated decision boundaries
+- **Meta-Classifier Ensemble:** Advanced two-level architecture
+- **Real-time Predictions:** Sub-second response times
+- **SHAP Explainable AI:** Transparent feature importance with clinical reasoning
+- **Risk Stratification:** Automated patient categorization (Low/Medium/High risk)
+
+### **💻 User Experience**
+- **Responsive Design:** Works on desktop, tablet, and mobile devices
+- **Dual Input Modes:** Manual entry or Excel batch processing
+- **Interactive Dashboard:** Real-time visualizations with exportable reports
+- **Enterprise Authentication:** Firebase-powered secure user management
+
+### **☁️ Cloud Architecture**
+- **Azure Static Web Apps:** Global CDN with edge optimization
+- **Auto-scaling Backend:** Azure App Service with intelligent scaling
+- **Enterprise Security:** HTTPS, CORS, and HIPAA-ready compliance
+- **Real-time Monitoring:** Application insights and health checks
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 19** - UI Framework
+- **Vite** - Build Tool
+- **Tailwind CSS** - Styling
+- **Recharts** - Data Visualization
+- **Firebase Auth** - Authentication
+
+### Backend
+- **FastAPI** - Web Framework
+- **Python 3.11** - Programming Language
+- **XGBoost** - Gradient Boosting
+- **Random Forest** - Ensemble Learning
+- **SHAP** - Explainable AI
+- **pandas** - Data Processing
+
+### Infrastructure
+- **Azure Static Web Apps** - Frontend Hosting
+- **Azure App Service** - Backend API
+- **GitHub Actions** - CI/CD Pipeline
 
 ### **� Professional User Experience**
 - **📱 Responsive Design:** Perfect on desktop, tablet, and mobile devices
@@ -121,45 +104,6 @@
 
 ![System Architecture Diagram](https://github.com/user-attachments/assets/a4de3b18-a3e2-420b-becc-da7d969cd71a)
 
-### **🔄 Data Flow Architecture**
-
-```mermaid
-graph TB
-    subgraph "🖥️ Frontend Layer - React 19"
-        A[📱 React SPA] --> B[🌐 Azure Static Web Apps]
-        A --> C[🔐 Firebase Auth]
-        A --> D[🎨 Tailwind CSS]
-        A --> E[📊 Recharts Visualization]
-    end
-    
-    subgraph "⚡ Backend Layer - FastAPI"
-        F[🚀 FastAPI Server] --> G[☁️ Azure App Service]
-        F --> H[🛡️ CORS & Security]
-        F --> I[✅ Pydantic Validation]
-        F --> J[📝 Auto-Generated Docs]
-    end
-    
-    subgraph "🧠 AI/ML Layer - Meta-Classifier"
-        K[🎯 Meta-Classifier] --> L[🔍 SHAP Explainer]
-        K --> M[⚙️ Feature Engineering]
-        K --> N[🔄 Preprocessing Pipeline]
-        
-        O[🌲 Random Forest] --> R[📊 Logistic Regression Meta]
-        P[🚀 XGBoost Boost] --> R
-        Q[🎯 Support Vector Machine] --> R
-        R --> K
-    end
-    
-    A -->|🔗 REST API Calls| F
-    F -->|🤖 Model Inference| K
-    K -->|📊 Predictions| F
-    F -->|📋 JSON Response| A
-    
-    style A fill:#e1f5fe
-    style F fill:#f3e5f5
-    style K fill:#fff3e0
-    style R fill:#ffebee
-```
 
 ### **📊 Technical Architecture Details**
 
@@ -487,112 +431,34 @@ Content-Type: multipart/form-data
 
 ## 📊 Machine Learning Model
 
-### **🎯 Meta-Classifier Ensemble Architecture**
+### Meta-Classifier Ensemble Architecture
+Our system uses a **two-level ensemble approach**:
 
-Our breakthrough approach uses a **two-level ensemble system** that outperforms traditional single-model approaches:
+**Level 1: Base Classifiers**
+- **Random Forest** - Handles feature interactions, robust to outliers
+- **XGBoost** - Gradient boosting with high accuracy
+- **Support Vector Machine** - Strong generalization capabilities
 
-```mermaid
-graph LR
-    subgraph "📊 Level 1: Base Classifiers"
-        A[🌲 Random Forest<br/>Bootstrap Aggregation] --> D[🎯 Meta-Classifier<br/>Logistic Regression]
-        B[🚀 XGBoost<br/>Gradient Boosting] --> D
-        C[🎯 Support Vector Machine<br/>Kernel Methods] --> D
-    end
-    
-    subgraph "🔍 Level 2: Meta-Learning"
-        D --> E[📈 Final Prediction<br/>+ Confidence Score]
-        D --> F[🧠 SHAP Explanations<br/>+ Feature Importance]
-    end
-    
-    G[📋 Patient Data<br/>16 Features] --> A
-    G --> B
-    G --> C
-    
-    style A fill:#e8f5e8
-    style B fill:#fff3e0
-    style C fill:#f3e5f5
-    style D fill:#e3f2fd
-    style E fill:#ffebee
-    style F fill:#f9fbe7
-```
+**Level 2: Meta-Classifier**
+- **Logistic Regression** - Combines predictions from base classifiers optimally
 
-### **🔬 Advanced Model Components**
+### Model Performance
+| Metric | Value | Industry Benchmark | Improvement |
+|--------|-------|-------------------|-------------|
+| **Accuracy** | 92.3% | 75-80% | **+15%** |
+| **Precision** | 89.7% | 70-75% | **+17%** |
+| **Recall** | 94.1% | 65-75% | **+22%** |
+| **F1-Score** | 91.8% | 70-75% | **+18%** |
 
-#### **🌲 Base Classifier 1: Random Forest**
-- **Algorithm:** Bootstrap Aggregated Decision Trees
-- **Strengths:** Handles feature interactions, robust to outliers
-- **Configuration:** 100 estimators, max depth optimized via cross-validation
-- **Role:** Captures non-linear patterns and feature importance baselines
-
-#### **🚀 Base Classifier 2: XGBoost**
-- **Algorithm:** Gradient Boosted Decision Trees with Regularization
-- **Strengths:** High accuracy, built-in overfitting protection
-- **Configuration:** Learning rate 0.1, early stopping, L1/L2 regularization
-- **Role:** Optimizes for prediction accuracy and speed
-
-#### **🎯 Base Classifier 3: Support Vector Machine**
-- **Algorithm:** Kernel-based Classification with RBF Kernel
-- **Strengths:** Strong generalization, effective in high-dimensional space
-- **Configuration:** RBF kernel, optimized C and gamma parameters
-- **Role:** Provides diverse learning approach for ensemble diversity
-
-#### **📊 Meta-Classifier: Logistic Regression**
-- **Algorithm:** Linear combination of base classifier outputs
-- **Input Features:** Probability scores from all 3 base classifiers
-- **Output:** Final prediction with calibrated probabilities
-- **Role:** Learns optimal weighting of base classifier contributions
-
-### **📈 Model Performance Metrics**
-
-| **Metric** | **Value** | **Industry Benchmark** | **Improvement** |
-|------------|-----------|------------------------|-----------------|
-| **Accuracy** | 92.3% | 75-80% | **+15% Better** |
-| **Precision** | 89.7% | 70-75% | **+17% Better** |
-| **Recall** | 94.1% | 65-75% | **+22% Better** |
-| **F1-Score** | 91.8% | 70-75% | **+18% Better** |
-| **AUC-ROC** | 0.94 | 0.75-0.80 | **+17% Better** |
-
-### **🔍 Feature Engineering Excellence**
-
-#### **📊 Top Risk Factors (SHAP Analysis)**
-| **Feature** | **Impact Score** | **Clinical Significance** |
-|-------------|------------------|--------------------------|
+### Key Risk Factors (SHAP Analysis)
+| Feature | Impact Score | Clinical Significance |
+|---------|--------------|----------------------|
 | `n_inpatient` | **0.212** | Previous admissions (strongest predictor) |
 | `n_emergency` | **0.095** | Emergency department visits |
-| `n_outpatient` | **0.095** | Outpatient care frequency |
 | `diabetes_med` | **0.062** | Diabetes medication management |
-| `medical_specialty` | **0.056** | Specialized care requirements |
 
-#### **⚙️ Advanced Feature Engineering**
-- **Interaction Terms:** Diagnosis × Procedures combinations
-- **Ratio Features:** Medications per day of stay
-- **Risk Stratification:** Age group × Diagnosis severity
-- **Temporal Features:** Visit frequency patterns
-- **Medical Complexity Score:** Composite risk indicator
-
-### **🧠 Explainable AI with SHAP**
-
-Our system provides **transparent AI explanations** for every prediction:
-
-```python
-# Example SHAP Output
-{
-  "prediction": "High Risk (73% probability)",
-  "top_contributors": [
-    "Previous inpatient visits (+0.15 impact)",
-    "Age group 60-70 (+0.12 impact)",
-    "Diabetes medication (+0.08 impact)"
-  ],
-  "confidence_level": "High (92% model confidence)"
-}
-```
-
-### **⚡ Production Optimization**
-- **Model Size:** Compressed to 15MB for fast loading
-- **Inference Time:** <100ms average response time
-- **Memory Usage:** <2GB RAM footprint
-- **Scalability:** Handles 1000+ concurrent predictions
-- **Model Versioning:** MLflow integration for model lifecycle management
+### Explainable AI
+Our system provides transparent explanations for every prediction using SHAP values, showing healthcare professionals exactly which factors contributed to the risk assessment.
 
 ## ☁️ Azure Deployment
 
@@ -866,4 +732,3 @@ Ready to scale this solution in your organization? **Contact us** to discuss ent
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
 
 ---
-
