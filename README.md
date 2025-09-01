@@ -61,7 +61,7 @@ A **meta-classifier ensemble** system that:
 
 ### Backend
 - **FastAPI** - Web Framework
-- **Python 3.11** - Programming Language
+- **Python 3.12** - Programming Language
 - **XGBoost** - Gradient Boosting
 - **Logistic Regression** - Meta-Classifier
 - **Random Forest** - Ensemble Learning
@@ -112,7 +112,7 @@ Our system uses a **two-level ensemble approach**:
 
 ### Prerequisites
 - Node.js 18+ and npm
-- Python 3.11+
+- Python 3.12
 - Git
 
 ### Setup
@@ -212,6 +212,7 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
 
 
 
