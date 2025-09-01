@@ -2,6 +2,12 @@
 
 [![Azure](https://img.shields.io/badge/Deployed%20on-Azure-blue.svg)](https://azure.microsoft.com/)  [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 
+## 🔥 Live Demo
+
+**🚀 Live Application:** [https://hospital-readmission-prediction.azurewebsites.net](https://hospital-readmission-prediction.azurewebsites.net)
+
+**📹 Video Demo:** [Google Drive](https://drive.google.com/file/d/1lMaDE1zufRcKzPlZR5N0g_s-OHHZvZK4/view?usp=sharing)
+
 
 ## 🎓 RMD Engineering College - Team SuperNexis
 
@@ -22,12 +28,6 @@ A **meta-classifier ensemble** system that:
 - Provides **explainable AI** insights using SHAP
 - Offers **dual-mode interface** (manual + Excel batch processing)
 - Deployed on **Microsoft Azure** with enterprise security
-
-## 🔥 Live Demo
-
-**🚀 Live Application:** [https://hospital-readmission-prediction.azurewebsites.net](https://hospital-readmission-prediction.azurewebsites.net)
-
-**📹 Video Demo:** [Google Drive](https://drive.google.com/file/d/1lMaDE1zufRcKzPlZR5N0g_s-OHHZvZK4/view?usp=sharing)
 
 
 ## ⚡ Key Features
@@ -212,6 +212,7 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
 
 
 
