@@ -7,27 +7,14 @@
 
 ## 🎓 RMD Engineering College - Team SuperNexis
 
-**Domain:** Life Sciences
-**Problem:** Predicting Hospital Readmission Risk using Machine Learning  
+**Domain:** Life Sciences  
+**Problem:** Predicting Hospit  
 **Solution:** Meta-Classifier Ensemble with Explainable AI
-
-
-## 📋 Table of Contents
-
-- [Problem & Solution](#problem--solution)
-- [Key Features](#key-features)
-- [Technology Stack](#technology-stack)
-- [Machine Learning Model](#machine-learning-model)
-- [Live Demo](#live-demo)
-- [Quick Start](#quick-start)
-- [API Documentation](#api-documentation)
-- [Team](#team)
-- [Contact](#contact)
 
 ## 🎯 Problem & Solution
 
-### The Healthcare Challenge
-Hospital readmissions cost the U.S. healthcare system **$41 billion annually**, with 1 in 7 patients readmitted within 30 days.
+### The Problem Statement
+Hospital readmissions are one of the costliest challenges facing healthcare systems, but conventional models fail to predict readmissions well. Many existing models use exclusively manually-engineered features, which are dataset specific.
 
 ### Our Solution
 A **meta-classifier ensemble** system that:
@@ -88,7 +75,7 @@ Our system uses a **two-level ensemble approach**:
 **Level 1: Base Classifiers**
 - **Random Forest** - Handles feature interactions, robust to outliers
 - **XGBoost** - Gradient boosting with high accuracy
-- **Support Vector Machine** - Strong generalization capabilities
+- **Logistic Regression** - Linear classification with probabilistic output
 
 **Level 2: Meta-Classifier**
 - **Logistic Regression** - Combines predictions from base classifiers optimally
@@ -98,6 +85,18 @@ Our system uses a **two-level ensemble approach**:
 **🚀 Live Application:** [https://hospital-readmission-prediction.azurewebsites.net](https://hospital-readmission-prediction.azurewebsites.net)
 
 **📹 Video Demo:** [Google Drive](https://drive.google.com/drive/folders/1xR6bsENC0vNs_pI55uyq3dNEQismFDKi?usp=sharing)
+
+## User Interface 
+
+<img width="1902" height="1024" alt="image" src="https://github.com/user-attachments/assets/d4e0d9c3-0e0d-4e0b-96d7-19fea7ad17d9" />
+
+
+
+- **Dashboard**
+
+<img width="1906" height="1072" alt="image" src="https://github.com/user-attachments/assets/3b6faaaf-cc18-496e-91cb-7471b0fd1cdd" />
+
+
 
 ### Features
 - **Individual Patient Assessment:** Enter patient data manually
@@ -171,15 +170,12 @@ Content-Type: application/json
 
 ### Team SuperNexis - RMD Engineering College
 
-**Mohan Balaji** - *Team Lead & ML Engineer*
-- **Role:** Full-Stack Development, Machine Learning Architecture, DevOps
-- **Expertise:** Python, React, Azure Cloud, XGBoost, Deep Learning
-- **Contact:** bmohanbalaji1976@gmail.com
 - **GitHub:** [@Mohan-Balaji](https://github.com/Mohan-Balaji)
 
 **Academic Institution:** RMD Engineering College  
-**Department:** Artificial Intelligence and Machine Learning  
+**Department:** Artificial Intelligence and Machine Learning
 
+## 📞 Contact
 
 **📧 Email:** bmohanbalaji1976@gmail.com  
 **🔗 GitHub:** [hospital-readmission-prediction](https://github.com/Mohan-Balaji/hospital-readmission-prediction)  
@@ -188,8 +184,7 @@ Content-Type: application/json
 
 
 
-**"Building the future of healthcare, one prediction at a time." - Team SuperNexis**
+**Team SuperNexis**
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
-
