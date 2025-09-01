@@ -330,6 +330,7 @@ const DashboardPage = () => {
       if (!samples || !Array.isArray(samples) || samples.length === 0) {
         samples = [
           {
+            "patient_id": "P1226",
             "age": "[50-60)",
             "time_in_hospital": 3,
             "n_lab_procedures": 39,
