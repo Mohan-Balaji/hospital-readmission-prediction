@@ -227,10 +227,13 @@ const DashboardPage = () => {
 
     for (const baseUrl of apiUrls) {
       try {
+        // Remove patient_id from the payload sent to backend
+        const { patient_id, ...patientDataForBackend } = patient;
+        
         const res = await fetch(`${baseUrl}/explain`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(patient)
+          body: JSON.stringify(patientDataForBackend)
         });
 
         if (!res.ok) {
@@ -238,7 +241,9 @@ const DashboardPage = () => {
           throw new Error(err.detail || `HTTP ${res.status}: ${res.statusText}`);
         }
 
-        return res.json();
+        const response = await res.json();
+        // Add patient_id back to the response
+        return { ...response, patient_id };
       } catch (error) {
         // Try next endpoint
         console.error(`POST /explain failed at ${baseUrl}:`, error);

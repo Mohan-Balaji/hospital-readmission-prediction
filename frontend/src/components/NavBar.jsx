@@ -51,19 +51,21 @@ const NavBar = () => {
         
         {/* Desktop Menu */}
         <div className="hidden md:flex md:items-center md:space-x-6">
-          {/* Home and About always visible */}
+          {/* Home always visible */}
           <Link
             to="/"
             className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
           >
             Home
           </Link>
-          <Link
-            to="/about"
-            className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
-          >
-            About
-          </Link>
+          
+          {/* Authenticated user menu */}
+          {!loading && user && (
+            <Link to="/dashboard" className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm">
+              Dashboard
+            </Link>
+          )}
+          
           <Link
             to="/collaboration"
             className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
@@ -71,14 +73,12 @@ const NavBar = () => {
             Collaboration
           </Link>
           
-          {/* Authenticated user extra menu */}
-          {!loading && user && (
-            <>
-              <Link to="/dashboard" className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm">
-                Dashboard
-              </Link>
-            </>
-          )}
+          <Link
+            to="/about"
+            className="px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
+          >
+            About
+          </Link>
         </div>
         
         {/* Desktop Sign In/Logout */}
@@ -125,13 +125,18 @@ const NavBar = () => {
           >
             Home
           </Link>
-          <Link
-            to="/about"
-            className="block px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
-            onClick={() => setMenuOpen(false)}
-          >
-            About
-          </Link>
+          
+          {/* Authenticated user mobile menu */}
+          {!loading && user && (
+            <Link 
+              to="/dashboard" 
+              className="block px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
+              onClick={() => setMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+          )}
+          
           <Link
             to="/collaboration"
             className="block px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
@@ -140,23 +145,22 @@ const NavBar = () => {
             Collaboration
           </Link>
           
-          {/* Authenticated user mobile menu */}
+          <Link
+            to="/about"
+            className="block px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
+            onClick={() => setMenuOpen(false)}
+          >
+            About
+          </Link>
+          
+          {/* Authentication buttons */}
           {!loading && user ? (
-            <>
-              <Link 
-                to="/dashboard" 
-                className="block px-4 py-2 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm"
-                onClick={() => setMenuOpen(false)}
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-4 py-3 rounded-lg bg-gray-100 text-gray-800 font-medium hover:bg-gray-200 transition-colors duration-200 text-sm"
-              >
-                Logout
-              </button>
-            </>
+            <button
+              onClick={handleLogout}
+              className="w-full text-left px-4 py-3 rounded-lg bg-gray-100 text-gray-800 font-medium hover:bg-gray-200 transition-colors duration-200 text-sm"
+            >
+              Logout
+            </button>
           ) : (
             <>
               <button
