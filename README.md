@@ -1,4 +1,4 @@
-﻿# 🏥 Hospital Readmission Prediction System
+# 🏥 Hospital Readmission Prediction System
 
 [![Azure](https://img.shields.io/badge/Deployed%20on-Azure-blue.svg)](https://azure.microsoft.com/)  [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 

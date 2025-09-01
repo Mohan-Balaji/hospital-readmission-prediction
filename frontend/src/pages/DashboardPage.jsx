@@ -67,6 +67,28 @@ const SPECIALTY_OPTIONS = [
   { value: 'Other', label: 'Other' }
 ];
 
+// Helper function to calculate proper chart domain bounds
+const calculateChartDomain = (data) => {
+  if (!data || data.length === 0) return [-0.01, 0.01];
+  
+  const values = data.map(d => d.value).filter(v => Number.isFinite(v));
+  if (values.length === 0) return [-0.01, 0.01];
+  
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const range = max - min;
+  
+  // Handle very small ranges to prevent scaling issues
+  if (Math.abs(range) < 0.001) {
+    return [-0.005, 0.005];
+  }
+  
+  // Add padding to prevent bars from touching the edges
+  const padding = Math.max(range * 0.1, 0.001);
+  
+  return [min - padding, max + padding];
+};
+
 const DashboardPage = () => {
   const [user] = useAuthState(auth);
 
@@ -397,13 +419,21 @@ const DashboardPage = () => {
   const selectedResult = results[selectedIndex] || null;
   const chartData = useMemo(() => {
     if (!selectedResult || !selectedResult.top_contributions) return [];
-    const items = selectedResult.top_contributions.map((c) => ({
-      feature: c.feature.split('__').slice(-1)[0],
-      value: c.shap_value,
-      direction: c.shap_value >= 0 ? 'positive' : 'negative'
-    }));
+    
+    const items = selectedResult.top_contributions
+      .filter(c => c && typeof c.shap_value === 'number' && Number.isFinite(c.shap_value))
+      .map((c) => ({
+        feature: c.feature ? c.feature.split('__').slice(-1)[0] : 'Unknown',
+        value: parseFloat(c.shap_value) || 0,
+        direction: c.shap_value >= 0 ? 'positive' : 'negative'
+      }));
+    
     // Sort by absolute impact descending
     items.sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+    
+    // Ensure we have valid data for chart scaling
+    if (items.length === 0) return [];
+    
     return items;
   }, [selectedResult]);
 
@@ -708,11 +738,26 @@ const DashboardPage = () => {
                       <span className="inline-block w-3 h-3 rounded-sm ml-3" style={{ background: '#10b981' }}></span> decreases risk
                     </div>
                   </div>
-                  <div className="w-full h-96">
+                  <div className="w-full h-[500px]">
+                    {/* Debug info for chart scaling */}
+                    {chartData.length > 0 && (
+                      <div className="text-xs text-gray-500 mb-2 text-center">
+                        Chart range: {calculateChartDomain(chartData)[0].toFixed(6)} to {calculateChartDomain(chartData)[1].toFixed(6)}
+                      </div>
+                    )}
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={chartData} layout="vertical" margin={{ top: 10, right: 30, left: 10, bottom: 10 }}>
+                      <BarChart data={chartData} layout="vertical" margin={{ top: 20, right: 80, left: 20, bottom: 20 }}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis type="number" tickFormatter={(v) => (Number.isFinite(v) ? Number(v).toFixed(2) : v)} domain={['auto', 'auto']} />
+                        <XAxis 
+                          type="number" 
+                          tickFormatter={(v) => (Number.isFinite(v) ? Number(v).toFixed(4) : v)} 
+                          domain={calculateChartDomain(chartData)}
+                          ticks={chartData.length > 0 ? [
+                            calculateChartDomain(chartData)[0],
+                            0,
+                            calculateChartDomain(chartData)[1]
+                          ] : []}
+                        />
                         <YAxis type="category" dataKey="feature" width={180} />
                         <Tooltip formatter={(value, name) => [Number(value).toFixed(4), 'SHAP']} labelFormatter={(lbl) => `Feature: ${lbl}`} />
                         <ReferenceLine x={0} stroke="#94a3b8" />
@@ -721,7 +766,7 @@ const DashboardPage = () => {
                           {chartData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={colorFor(entry.value)} />
                           ))}
-                          <LabelList dataKey="value" position="right" formatter={(v) => Number(v).toFixed(3)} className="text-xs" />
+                          <LabelList dataKey="value" position="right" formatter={(v) => Number(v).toFixed(4)} className="text-xs" />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>

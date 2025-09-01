@@ -40,3 +40,29 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Chart scaling improvements */
+.recharts-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.recharts-responsive-container {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ensure charts scale properly on mobile */
+@media (max-width: 768px) {
+  .recharts-wrapper {
+    transform: scale(0.9);
+    transform-origin: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .recharts-wrapper {
+    transform: scale(0.8);
+    transform-origin: center;
+  }
+}
