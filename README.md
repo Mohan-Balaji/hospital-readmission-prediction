@@ -18,7 +18,7 @@ Hospital readmissions are one of the costliest challenges facing healthcare syst
 
 ### Our Solution
 A **meta-classifier ensemble** system that:
-- Predicts readmission risk with **>90% accuracy**
+- Predicts readmission risk with **>78% accuracy**
 - Provides **explainable AI** insights using SHAP
 - Offers **dual-mode interface** (manual + Excel batch processing)
 - Deployed on **Microsoft Azure** with enterprise security
@@ -212,6 +212,7 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
 
 
 
