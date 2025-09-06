@@ -25,7 +25,7 @@ A **meta-classifier ensemble** system that:
 
 ## 🔥 Live Demo
 
-**🚀 Live Application:** [https://hospital-readmission-prediction.azurewebsites.net](https://hospital-readmission-prediction.azurewebsites.net)
+**🚀 Live Application:** https://delightful-flower-0e8ce2510.1.azurestaticapps.net
 
 **📹 Video Demo:** [Google Drive](https://drive.google.com/file/d/1lMaDE1zufRcKzPlZR5N0g_s-OHHZvZK4/view?usp=sharing)
 
@@ -212,6 +212,7 @@ Content-Type: application/json
 
 [![RMD Engineering College](https://img.shields.io/badge/Institution-RMD%20Engineering%20College-blue.svg)](https://rmd.ac.in)
 [![Azure Deployed](https://img.shields.io/badge/Deployed%20on-Microsoft%20Azure-0078d4.svg)](https://azure.microsoft.com)
+
 
 
 
